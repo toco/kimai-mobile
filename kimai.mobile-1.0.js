@@ -243,7 +243,7 @@ var Kimai =
 		$.ajax({
 			type: 'POST',
 			url: this.jsonApi,
-			data: {method: 'authenticate', id: Kimai.getApiCallID('authenticate'), params: {username: uid, password: pwd}},
+			data: JSON.stringify({method: 'authenticate', id: Kimai.getApiCallID('authenticate'), params: {username: uid, password: pwd}}),
 			async: false,
 			success: function(data) {
 				if (typeof data != 'undefined' && typeof data.result != 'undefined' && data.result != '') {
@@ -284,9 +284,10 @@ var Kimai =
 	 * @return null|array
 	 */
 	getRunningTask: function() {
-		var result = this._doApiCall('getActiveTask');
+		var taskArray = this._doApiCall('getActiveTask');
+		var result = taskArray[taskArray.length-1];
 		// only if a last entry is existing and its not stopped, return it
-		if (typeof result.zef_out != 'undefined' && result.zef_out == 0) {
+		if (typeof result != 'undefined' && typeof result.zef_out != 'undefined' && result.zef_out == 0) {
 			return result;
 		}
 		return null;
@@ -304,7 +305,7 @@ var Kimai =
 		$.ajax({
 			type: 'POST',
 			url: this.jsonApi,
-			data: {method: 'startRecord', id: Kimai.getApiCallID('startRecord'), params: {apiKey: this.apiKey, projectId: prjId, eventId: taskId}},
+			data: JSON.stringify({method: 'startRecord', id: Kimai.getApiCallID('startRecord'), params: {apiKey: this.apiKey, projectId: prjId, eventId: taskId}}),
 			async: false,
 			success: function(data) {
 				if (typeof data != 'undefined' && typeof data.result != 'undefined') {
@@ -338,7 +339,7 @@ var Kimai =
 		$.ajax({
 			type: 'POST',
 			url: this.jsonApi,
-			data: {method: apimethod, id: Kimai.getApiCallID(apimethod), params: {apiKey: this.apiKey}},
+			data: JSON.stringify({method: apimethod, id: Kimai.getApiCallID(apimethod), params: {apiKey: this.apiKey}}),
 			async: false,
 			success: function(data) {
 				if (typeof data != 'undefined' && typeof data.result != 'undefined') {
